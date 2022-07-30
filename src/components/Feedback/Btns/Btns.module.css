@@ -1,0 +1,37 @@
+.btn{
+    color: #303030;
+    border: none;
+    margin: 10px;
+    font-size: 32px;
+    background-color: inherit;
+    font-weight: bold;
+border-radius: 40px;
+    width: 160px;
+        height: 80px;
+        margin: 0;
+} 
+.li{
+    margin: 0px;
+    list-style-type: none;
+    border-radius: 40px;
+    width: 160px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ul{
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    justify-content: space-around;
+}
+.li:nth-child(1){
+    background: rgb(0, 255, 100);
+}
+.li:nth-child(2) {
+    background: rgb(255, 255, 100);
+}
+.li:nth-child(3) {
+    background: rgb(255, 0, 100);
+}
