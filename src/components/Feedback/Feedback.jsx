@@ -1,4 +1,4 @@
-import React from "react"
+import {useState} from "react"
 import Section from "./Section/Section"
 import Btns from "./Btns/Btns"
 import Statistics from "./Statistics/Statistics"
@@ -6,63 +6,59 @@ import Notification from "./Notification/Notification"
 
 import styled from 'styled-components';
 
-class Feedback extends React.Component{
-    state = {
-        good: 0,
-        neutral: 0,
-        bad: 0
-    }
-    onClickBtn = event => {
-    const e = event.target.textContent;
-        this.setState(prevState => {
-            return { [e]: prevState[e] + 1 };
-        });
-    };
-    countTotalFeedback() {
-        const arrayDataCount = Object.values(this.state);
-        const total =  arrayDataCount.reduce((acc, item) => {
-            return acc + item;
-        }, 0);
-        return total;
-    }
-    countPositiveFeedbackPercentage() {
-        return Math.floor((this.state.good * 100) / this.countTotalFeedback());
-    }
-    render() {
-        const options = Object.keys(this.state)
-        const { good, neutral, bad } = this.state
-        const total = this.countTotalFeedback()
-        if (total === 0) {
-            return (
-                <>
-                <Card>
-                    <Section title={'Please leave feedback'}>
-                        <Btns names={options} voting={this.onClickBtn}></Btns>
-                    </Section>
-                    <Section title={'Statistics'}>
-                        <Notification message={'There is no feedback'}></Notification>
-                    </Section>
-                </Card>
-                </>
-            )
-        } else {
-            return (
-                <>
-                <Card>
-                    <Section title={'Please leave feedback'}>
-                        <Btns names={options} voting={this.onClickBtn}></Btns>
-                    </Section>
-                    <Section title={'Statistics'}>
-                        <Statistics
-                            good={good} neutral={neutral} bad={bad} total={this.countTotalFeedback()} posPer={this.countPositiveFeedbackPercentage()}>
-                        </Statistics>
-                    </Section>
-                </Card>
-                </>
-            )
+export default function Feedback() {
+
+    const [good, setGood] = useState(0);
+    const [neutral, setNeutral] = useState(0);
+    const [bad, setBad] = useState(0);
+
+    const onClickBtn = (event) => {
+        switch (event.target.textContent) {
+            case "good":
+                setGood(good + 1);
+                break;
+            case "neutral":
+                setNeutral(neutral + 1);
+                break;
+            case "bad":
+                setBad(bad + 1);
+                break;
+            default:
+                break;
         }
+    };
+
+    const countTotalFeedback = () => {
+        return good + neutral + bad;
     }
-}
+    const total = countTotalFeedback();
+
+    const countPositiveFeedbackPercentage = () => {
+        return Math.floor(( good  * 100) / total);
+    }
+    const posPer = countPositiveFeedbackPercentage();
+
+    const options = ['good', 'neutral', 'bad'];
+
+    return (
+            <>
+                <Card>
+                    <Section title={'Please leave feedback'}>
+                        <Btns names={options} voting={onClickBtn}></Btns>
+                    </Section>
+                    <Section title={'Statistics'}>
+                        {total === 0 ?
+                            <Notification message={'There is no feedback'}></Notification> :
+                            <Statistics
+                            good={good} neutral={neutral} bad={bad} total={total} posPer={posPer}>
+                            </Statistics>
+                        }
+                    </Section>
+                </Card>
+            </>
+        );
+};
+
 
 const Card = styled.div`
 border: 5px solid #000000;
@@ -76,5 +72,3 @@ border: 5px solid #000000;
     padding: 20px;
     width: 600px;
     background-color: #00cab9;`;
-
-export default Feedback
